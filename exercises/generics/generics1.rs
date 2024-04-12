@@ -6,9 +6,11 @@
 // Execute `rustlings hint generics1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
+enum MyStr<T> {
+    Str(T)
+}
 
 fn main() {
-    let mut shopping_list: Vec<?> = Vec::new();
-    shopping_list.push("milk");
+    let mut shopping_list: Vec<MyStr<String>> = Vec::new();
+    shopping_list.push(MyStr::<String>::Str("milk".to_string()));
 }
