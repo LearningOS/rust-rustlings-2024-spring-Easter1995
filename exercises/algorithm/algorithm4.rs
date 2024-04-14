@@ -9,6 +9,7 @@ use std::fmt::Debug;
 
 
 #[derive(Debug)]
+// 定义了二叉树节点，每个二叉树有Option类型的左右叶子节点
 struct TreeNode<T>
 where
     T: Ord,
@@ -19,6 +20,7 @@ where
 }
 
 #[derive(Debug)]
+// 定义了二叉树，指定跟节点
 struct BinarySearchTree<T>
 where
     T: Ord,
@@ -26,6 +28,7 @@ where
     root: Option<Box<TreeNode<T>>>,
 }
 
+// 二叉树节点初始化
 impl<T> TreeNode<T>
 where
     T: Ord,
@@ -39,6 +42,7 @@ where
     }
 }
 
+// 二叉排序树
 impl<T> BinarySearchTree<T>
 where
     T: Ord,

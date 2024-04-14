@@ -2,13 +2,13 @@
 	double linked list reverse
 	This problem requires you to reverse a doubly linked list
 */
-// I AM NOT DONE
 
 use std::fmt::{self, Display, Formatter};
 use std::ptr::NonNull;
 use std::vec::*;
 
 #[derive(Debug)]
+// 定义节点，每个节点有一个指向前一个节点的指针和指向后一个节点的指针
 struct Node<T> {
     val: T,
     next: Option<NonNull<Node<T>>>,
@@ -25,6 +25,7 @@ impl<T> Node<T> {
     }
 }
 #[derive(Debug)]
+// 定义链表
 struct LinkedList<T> {
     length: u32,
     start: Option<NonNull<Node<T>>>,
@@ -37,6 +38,7 @@ impl<T> Default for LinkedList<T> {
     }
 }
 
+// 初始化链表
 impl<T> LinkedList<T> {
     pub fn new() -> Self {
         Self {
@@ -49,13 +51,13 @@ impl<T> LinkedList<T> {
     pub fn add(&mut self, obj: T) {
         let mut node = Box::new(Node::new(obj));
         node.next = None;
-        node.prev = self.end;
+        node.prev = self.end; // 新增节点的prev指针指向当前链表的末尾
         let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
         match self.end {
-            None => self.start = node_ptr,
+            None => self.start = node_ptr, // 如果链表还没有初始化
             Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
         }
-        self.end = node_ptr;
+        self.end = node_ptr; // 更新链表尾指针
         self.length += 1;
     }
 
@@ -72,9 +74,35 @@ impl<T> LinkedList<T> {
             },
         }
     }
+}
+
+impl<T: Clone> LinkedList<T> {
 	pub fn reverse(&mut self){
-		// TODO
-	}
+		let mut reversed_list = LinkedList::new();
+        // 获取链表的末尾节点
+        let mut current_node = self.end;
+        // while current_node.is_some() {
+        //     // 获取当前节点值的引用
+        //     let value = current_node.map(|ptr| unsafe{ &(*ptr.as_ptr()).val });
+        //     match value {
+        //         Some(x) => {
+        //             // 新链表加入x
+        //             reversed_list.add(x.clone());
+        //             // 指向上一个节点
+        //             current_node = unsafe{ (*current_node.unwrap().as_ptr()).prev };
+        //         }
+        //         None => break
+        //     }
+        // }
+        while let Some(node_ptr) = current_node {
+            let value = unsafe { &(*node_ptr.as_ptr()).val };
+            reversed_list.add(value.clone());
+            current_node = unsafe { (*node_ptr.as_ptr()).prev };
+        }
+        // 交换新链表和原链表的所有权
+        // std::mem::replace(self, reversed_list);
+        *self = reversed_list;
+    }
 }
 
 impl<T> Display for LinkedList<T>
