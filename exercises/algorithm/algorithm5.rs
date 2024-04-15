@@ -3,8 +3,7 @@
 	This problem requires you to implement a basic BFS algorithm
 */
 
-//I AM NOT DONE
-use std::collections::VecDeque;
+use std::collections::VecDeque; // 循环队列
 
 // Define a graph
 struct Graph {
@@ -12,7 +11,7 @@ struct Graph {
 }
 
 impl Graph {
-    // Create a new graph with n vertices
+    // Create a new graph with n vertices——表示这个图有n个点
     fn new(n: usize) -> Self {
         Graph {
             adj: vec![vec![]; n],
@@ -21,16 +20,31 @@ impl Graph {
 
     // Add an edge to the graph
     fn add_edge(&mut self, src: usize, dest: usize) {
-        self.adj[src].push(dest); 
+        // 用邻接表存的图
+        self.adj[src].push(dest);
         self.adj[dest].push(src); 
     }
 
     // Perform a breadth-first search on the graph, return the order of visited nodes
     fn bfs_with_return(&self, start: usize) -> Vec<usize> {
-        
-		//TODO
+        let mut visit_order = Vec::new();
+        let mut visited = vec![false; self.adj.len()]; // 标记从start开始的邻接点都没被访问过
+        let mut queue = VecDeque::new();
 
-        let mut visit_order = vec![];
+        visit_order.push(start);
+        visited[start] = true; // 当前节点标记为已访问
+        queue.push_back(start); // 当前节点入队
+
+        while let Some(vertice) = queue.pop_front() {
+            for &neighbor in &self.adj[vertice] {
+                if !visited[neighbor] {
+                    visit_order.push(neighbor);
+                    visited[neighbor] = true;
+                    queue.push_back(neighbor);
+                }
+            }
+        }
+
         visit_order
     }
 }
